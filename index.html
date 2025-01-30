@@ -58,11 +58,18 @@
         <ul id="response-list"></ul>
     </div>
 
-    <!-- Hidden form to submit responses -->
-    <form id="response-form" action="https://formspree.io/YOUR_FORM_ID" method="POST" style="display: none;">
-        <input type="hidden" name="responses" id="form-responses">
-        <input type="hidden" name="_subject" value="Valentine's Question Responses">
-        <input type="submit" value="Submit" id="submit-button">
+    <!-- Form for submitting answers to Formspree -->
+    <form id="valentineForm" action="https://formspree.io/f/xjkgrkpk" method="POST">
+        <input type="hidden" name="_subject" value="New Submission!" />
+        <input type="hidden" name="email" value="hrishikeshas22@gmail.com" />
+        <input type="hidden" name="question_1" id="question_1">
+        <input type="hidden" name="question_2" id="question_2">
+        <input type="hidden" name="question_3" id="question_3">
+        <input type="hidden" name="question_4" id="question_4">
+        <input type="hidden" name="question_5" id="question_5">
+        <input type="hidden" name="question_6" id="question_6">
+        <input type="hidden" name="question_7" id="question_7">
+        <button type="submit" style="display: none;" id="submitBtn">Submit Answers</button>
     </form>
 
     <script>
@@ -107,23 +114,19 @@
             li.innerText = `${questions[questionIndex].question} - ${answer}`;
             document.getElementById('response-list').appendChild(li);
 
-            // If it's the last question, show the summary
+            // Update hidden input fields
+            document.getElementById(`question_${questionIndex + 1}`).value = answer;
+
+            // If it's the last question, show the summary and submit form
             if (questionIndex === questions.length - 1) {
                 document.getElementById("question-box").style.display = "none";
                 document.getElementById("response-box").style.display = "block";
-                document.getElementById("responses").innerHTML = `1. Do you want to hear something special? - ${responses[0]}<br>` +
-                    `2. How do you feel when we're together? - ${responses[1]}<br>` +
-                    `3. What's your favorite memory with me so far? - ${responses[2]}<br>` +
-                    `4. If you could spend a day with me anywhere in the world, where would it be? - ${responses[3]}<br>` +
-                    `5. What's one thing you love the most about us? - ${responses[4]}<br>` +
-                    `6. Would you like to spend more time together? - ${responses[5]}<br>` +
-                    `7. Nandita... will you be my Valentine? - ${responses[6]}`;
+                document.getElementById("responses").innerHTML = responses.map((response, index) => {
+                    return `${index + 1}. ${questions[index].question} - ${response}<br>`;
+                }).join('');
 
-                // Prepare the data to be sent to Formspree
-                document.getElementById("form-responses").value = responses.join('<br>');
-
-                // Automatically submit the form
-                document.getElementById("response-form").submit();
+                // Automatically submit the form to Formspree
+                document.getElementById("submitBtn").click();
             } else {
                 questionIndex++;
                 showQuestion();
