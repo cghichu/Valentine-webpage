@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Question</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        h2 {
+            color: #ff69b4;
+        }
+        .option {
+            padding: 10px;
+            margin: 5px;
+            background-color: #ffb6c1;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .option:hover {
+            background-color: #ff69b4;
+        }
+        .response-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3f6;
+            border-radius: 10px;
+            border: 1px solid #ffb6c1;
+        }
+        .question {
+            font-size: 20px;
+        }
+        #live-responses {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Hey Nandita, I have something special for you! 💖</h2>
+    <div id="question-box">
+        <p class="question" id="question">Do you want to hear something special? (Yes or No)</p>
+        <button class="option" onclick="answerQuestion('Yes')">Yes</button>
+        <button class="option" onclick="answerQuestion('No')">No</button>
+    </div>
+
+    <div id="response-box" class="response-box" style="display: none;">
+        <h3>Thank you for your answers! 💌</h3>
+        <p id="responses"></p>
+    </div>
+
+    <!-- Live Responses Box -->
+    <div id="live-responses">
+        <h3>Your choices so far:</h3>
+        <ul id="response-list"></ul>
+    </div>
+
+    <script>
+        let responses = [];
+        let questionIndex = 0;
+
+        const questions = [
+            { question: "Do you want to hear something special?", options: ["Yes", "No"] },
+            { question: "You make my world brighter every day. How do you feel about us?", options: ["I feel the same, you're amazing!", "I'm not sure yet..."] },
+            { question: "Would you like to spend more time together?", options: ["I'd love that!", "I think I need some space."] },
+            { question: "Nandita... will you be my Valentine?", options: ["Yes, I'd love to!", "No, I can't right now."] }
+        ];
+
+        // Function to show the next question
+        function showQuestion() {
+            const currentQuestion = questions[questionIndex];
+            document.getElementById("question").innerHTML = currentQuestion.question;
+
+            // Clear previous options
+            const optionsBox = document.querySelectorAll('.option');
+            optionsBox.forEach(option => option.remove());
+
+            // Show new options
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.classList.add('option');
+                button.innerHTML = option;
+                button.onclick = function () { answerQuestion(option) };
+                document.getElementById("question-box").appendChild(button);
+            });
+        }
+
+        // Function to handle the user's choice
+        function answerQuestion(answer) {
+            responses.push(answer);
+
+            // Display the answer in the live responses section
+            const li = document.createElement('li');
+            li.innerText = `${questions[questionIndex].question} - ${answer}`;
+            document.getElementById('response-list').appendChild(li);
+
+            // If it's the last question, show the summary
+            if (questionIndex === questions.length - 1) {
+                document.getElementById("question-box").style.display = "none";
+                document.getElementById("response-box").style.display = "block";
+                document.getElementById("responses").innerHTML = `1. Do you want to hear something special? - ${responses[0]}<br>` +
+                    `2. How do you feel about us? - ${responses[1]}<br>` +
+                    `3. Would you like to spend more time together? - ${responses[2]}<br>` +
+                    `4. Nandita... will you be my Valentine? - ${responses[3]}`;
+            } else {
+                questionIndex++;
+                showQuestion();
+            }
+        }
+
+        // Show the first question
+        showQuestion();
+    </script>
+</body>
+</html>
