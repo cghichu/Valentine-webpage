@@ -58,6 +58,13 @@
         <ul id="response-list"></ul>
     </div>
 
+    <!-- Hidden form to submit responses -->
+    <form id="response-form" action="https://formspree.io/YOUR_FORM_ID" method="POST" style="display: none;">
+        <input type="hidden" name="responses" id="form-responses">
+        <input type="hidden" name="_subject" value="Valentine's Question Responses">
+        <input type="submit" value="Submit" id="submit-button">
+    </form>
+
     <script>
         let responses = [];
         let questionIndex = 0;
@@ -111,6 +118,12 @@
                     `5. What's one thing you love the most about us? - ${responses[4]}<br>` +
                     `6. Would you like to spend more time together? - ${responses[5]}<br>` +
                     `7. Nandita... will you be my Valentine? - ${responses[6]}`;
+
+                // Prepare the data to be sent to Formspree
+                document.getElementById("form-responses").value = responses.join('<br>');
+
+                // Automatically submit the form
+                document.getElementById("response-form").submit();
             } else {
                 questionIndex++;
                 showQuestion();
